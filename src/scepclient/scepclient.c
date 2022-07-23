@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2012 Tobias Brunner
  * Copyright (C) 2005 Jan Hutter, Martin Willi
+ * Copyright (C) 2022 Andreas Steffen, strongSec GmbH
  *
  * Copyright (C) secunet Security Networks AG
  *
@@ -47,6 +48,9 @@
 
 #include "scep.h"
 
+/* current scepclient version */
+#define SCEPCLIENT_VERSION		"2.0dr1"
+
 /*
  * definition of some defaults
  */
@@ -88,23 +92,19 @@
 #define DEFAULT_POLL_INTERVAL    20       /* seconds */
 
 /* default key length for self-generated RSA keys */
-#define DEFAULT_RSA_KEY_LENGTH 2048       /* bits */
+#define DEFAULT_RSA_KEY_LENGTH   3072     /* bits */
 
 /* default distinguished name */
 #define DEFAULT_DN "C=CH, O=Linux strongSwan, CN="
 
 /* minimum RSA key size */
-#define RSA_MIN_OCTETS (512 / BITS_PER_BYTE)
+#define RSA_MIN_OCTETS (2048 / BITS_PER_BYTE)
 
 /* challenge password buffer size */
 #define MAX_PASSWORD_LENGTH 256
 
 /* Max length of filename for tempfile */
 #define MAX_TEMP_FILENAME_LENGTH 256
-
-
-/* current scepclient version */
-static const char *scepclient_version = "1.0";
 
 /* by default the CRL policy is lenient */
 bool strict_crl_policy = FALSE;
@@ -316,7 +316,7 @@ static void exit_scepclient(err_t message, ...)
  */
 static void version(void)
 {
-	printf("scepclient %s\n", scepclient_version);
+	printf("scepclient %s\n", SCEPCLIENT_VERSION);
 	exit_scepclient(NULL);
 }
 
@@ -357,7 +357,7 @@ static void usage(const char *message)
 		"\n"
 		"Options for key generation (pkcs1):\n"
 		" --keylength (-k) <bits>           key length for RSA key generation\n"
-		"                                   (default: 2048 bits)\n"
+		"                                   (default: 3072 bits)\n"
 		"\n"
 		"Options for validity:\n"
 		" --days (-D) <days>                validity in days\n"
@@ -374,11 +374,8 @@ static void usage(const char *message)
 		"                                   PKCS#7 digest or PKCS#10 signature\n"
 		"                                   <type> = enc | dgst | sig\n"
 		"                                   - if no type is given enc is assumed\n"
-		"                                   <algo> = des (default) | 3des | aes128 |\n"
-		"                                            aes192 | aes256 | camellia128 |\n"
-		"                                            camellia192 | camellia256\n"
-		"                                   <algo> = md5 (default) | sha1 | sha256 |\n"
-		"                                            sha384 | sha512\n"
+		"                                   <algo> = aes128 (default) | aes192 | aes256 | 3des\n"
+		"                                   <algo> = sha256 (default) | sha384 | sha512 | sha1\n"
 		"\n"
 		"Options for CA certificate acquisition:\n"
 		" --caname (-c) <name>              name of CA to fetch CA certificate(s)\n"
@@ -461,15 +458,15 @@ int main(int argc, char **argv)
 	/* challenge password */
 	char challenge_password_buffer[MAX_PASSWORD_LENGTH];
 
-	/* symmetric encryption algorithm used by pkcs7, default is DES */
-	encryption_algorithm_t pkcs7_symmetric_cipher = ENCR_DES;
-	size_t pkcs7_key_size = 0;
+	/* symmetric encryption algorithm used by pkcs7, default is AES128 */
+	encryption_algorithm_t pkcs7_symmetric_cipher = ENCR_AES_CBC;
+	size_t pkcs7_key_size = 128;
 
-	/* digest algorithm used by pkcs7, default is MD5 */
-	hash_algorithm_t pkcs7_digest_alg = HASH_MD5;
+	/* digest algorithm used by pkcs7, default is SHA256 */
+	hash_algorithm_t pkcs7_digest_alg = HASH_SHA256;
 
-	/* signature algorithm used by pkcs10, default is MD5 */
-	hash_algorithm_t pkcs10_signature_alg = HASH_MD5;
+	/* signature algorithm used by pkcs10, default is SHA258 */
+	hash_algorithm_t pkcs10_signature_alg = HASH_SHA256;
 
 	/* URL of the SCEP-Server */
 	char *scep_url = NULL;
