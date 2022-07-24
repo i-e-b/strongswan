@@ -56,10 +56,10 @@
  */
 
 /* some paths */
-#define REQ_PATH                        IPSEC_CONFDIR "/ipsec.d/reqs"
-#define HOST_CERT_PATH                  IPSEC_CONFDIR "/ipsec.d/certs"
-#define CA_CERT_PATH                    IPSEC_CONFDIR "/ipsec.d/cacerts"
-#define PRIVATE_KEY_PATH                IPSEC_CONFDIR "/ipsec.d/private"
+#define REQ_PATH                        IPSEC_CONFDIR "/swanctl/req"
+#define HOST_CERT_PATH                  IPSEC_CONFDIR "/swanctl/x509"
+#define CA_CERT_PATH                    IPSEC_CONFDIR "/swanctl/x509ca"
+#define PRIVATE_KEY_PATH                IPSEC_CONFDIR "/swanctl/private"
 
 /* default name of DER-encoded PKCS#1 private key file */
 #define DEFAULT_FILENAME_PKCS1          "myKey.der"
