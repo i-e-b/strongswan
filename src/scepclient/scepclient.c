@@ -1037,6 +1037,8 @@ int main(int argc, char **argv)
 					exit_scepclient("could not write cert file '%s': %s",
 									path, strerror(errno));
 				}
+				DBG1(DBG_APP, "%s cert \"%Y\" written to '%s'",
+					 ca_cert ? "CA" : "RA", cert->get_subject(cert), path);
 				chunk_free(&encoding);
 			}
 			enumerator->destroy(enumerator);
