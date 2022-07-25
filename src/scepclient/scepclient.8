@@ -1,21 +1,21 @@
 .\"
-.TH "IPSEC_SCEPCLIENT" "8" "2012-05-11" "strongSwan" ""
+.TH "SCEPCLIENT" "8" "2022-07-25" "strongSwan" ""
 .SH "NAME"
-ipsec scepclient \- Client for the SCEP protocol
+scepclient \- Client for the Simple Certificate Enrollment Protocol (SCEP)
 .SH "SYNOPSIS"
-.B ipsec scepclient [argument ...]
+.B scepclient [argument ...]
 .sp
-.B ipsec scepclient
+.B scepclient
 .B \-\-help
 .br
-.B ipsec scepclient
+.B scepclient
 .B \-\-version
 .SH "DESCRIPTION"
 .BR scepclient
-is a client implementation of Cisco System's Simple Certificate Enrollment Protocol (SCEP) written for Linux strongSwan <http://www.strongswan.org>.
+is a client implementation of the Simple Certificate Enrollment Protocol (SCEP, RFC 8894).
 .BR scepclient
-is designed to be used for certificate enrollment on machines using the OpenSource IPsec solution
-.I strongSwan.
+is designed to be used for certificate enrollment on platforms using the \fIstrongSwan\fP
+open source IPsec solution.
 .SH "FEATURES"
 .BR scepclient
 implements the following features of SCEP:
@@ -30,12 +30,12 @@ Acquisition of CA certificate(s)
 .SS Basic Startup Options
 .B \-v, \-\-version
 .RS 4
-Display the version of ipsec scepclient.
+Display the version of scepclient.
 .PP
 .RE
 .B \-h, \-\-help
 .RS 4
-Display usage of ipsec scepclient.
+Display usage of scepclient.
 .RE
 
 .SS General Options
@@ -44,7 +44,7 @@ Display usage of ipsec scepclient.
 Full HTTP URL of the SCEP server to be used for certificate enrollment and CA certificate acquisition.
 .RE
 .PP
-.B \-+, \-\-optionsfrom \fIfilename\fP
+.B \-+, \-\-options \fIfilename\fP
 .RS 4
 Reads additional options from \fIfilename\fP.
 .RE
@@ -66,7 +66,7 @@ Output file of acquired CA certificate. If more then one CA certificate is
 available, \fIfilename\fP is used as prefix for the resulting files (refer to
 EXAMPLES below for details).
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/cacerts/caCert.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/cacerts/caCert.der.
 .RE
 
 .SS Options For Certificate Enrollment
@@ -79,29 +79,29 @@ Supported values for \fItype\fP:
 .IP "\fBpkcs1\fP" 12
 RSA private key in PKCS#1 file format. If no input of this type is specified, a RSA key gets generated.
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/private/myKey.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/private/myKey.der.
 .IP "\fBpkcs10\fP" 12
 PKCS#10 certificate request to be used in the SCEP request. If no input of this type is specified, a request is generated.
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/req/myReq.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/req/myReq.der.
 .IP "\fBcacert\-enc\fP" 12
 CA certificate to encrypt the SCEP request. Has to be specified for certificate enrollment.
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/cacerts/caCert.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/x509ca/caCert.der.
 .IP "\fBcacert\-sig\fP" 12
 CA certificate to check signature of SCEP reply. Has to be specified for certificate enrollment.
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/cacerts/caCert.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/x509ca/caCert.der.
 .IP "\fBcert-self\fP" 12
 Certificate to be used in the SCEP request.  If it is not specified a
 self-signed certificate is generated automatically.
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/certs/selfCert.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/x509/selfCert.der.
 .RE
 .PP
 .B \-k, \-\-keylength \fIbits\fP
 .RS 4
-sets the key length for RSA key generation. The default length for a generated rsa key is set to 2048 bit.
+sets the length of the RSA key to be generated. The default is 3072 bits.
 .RE
 .PP
 .B \-D, \-\-days \fIdays\fP
@@ -130,19 +130,9 @@ Distinguished name as comma separated list of relative distinguished names. Use 
 is used with \fIhostname\fP being the return value of the \fIgethostname\fP() function.
 .RE
 .PP
-.B \-s, \-\-subjectAltName \fItype\fP=\fIvalue\fP
+.B \-s, \-\-san \fIsan\fP
 .RS 4
-Include subjectAltName in certificate request. This option can be specified multiple times to specify a subjectAltName
-for every \fItype\fP.
-.PP
-Supported values for \fItype\fP:
-.IP "\fBemail\fP" 12
-subjectAltName is a email address.
-.IP "\fBdns\fP" 12
-subjectAltName is a hostname.
-.IP "\fBip\fP" 12
-subjectAltName is a IP address.
-.RE
+Include a \fIsubjectAltName\fP in the certificate request. This option can be used multiple times.
 .PP
 .B \-p, \-\-password \fIpw\fP
 .RS 4
@@ -170,26 +160,18 @@ hash algorithm for the signature in PKCS#10
 If \fItype\fP is not specified \fBenc\fP is assumed.
 .PP
 Supported values for \fIalgo\fP (\fBenc\fP):
-.IP "\fBdes\fP" 12
-DES-CBC encryption (key size = 56 bit). Default.
-.IP "\fB3des\fP" 12
-Triple DES-EDE-CBC encryption (key size = 168 bit).
 .IP "\fBaes128\fP" 12
-AES-CBC encryption (key size = 128 bit).
+AES-CBC encryption with 128 bit key (default).
 .IP "\fBaes192\fP" 12
-AES-CBC encryption (key size = 192 bit).
+AES-CBC encryption with 192 bit key.
 .IP "\fBaes256\fP" 12
-AES-CBC encryption (key size = 256 bit).
-.IP "\fBcamellia128\fP" 12
-Camellia-CBC encryption (key size = 128 bit).
-.IP "\fBcamellia192\fP" 12
-Camellia-CBC encryption (key size = 192 bit).
-.IP "\fBcamellia256\fP" 12
-Camellia-CBC encryption (key size = 256 bit).
+AES-CBC encryption with 256 bit key.
+.IP "\fB3des\fP" 12
+Triple DES-EDE-CBC encryption with 168 bit key.
 .PP
 Supported values for \fIalgo\fP (\fBdgst\fP or \fBsig\fP):
 .PP
-\fBmd5\fP (default), \fBsha1\fP, \fBsha256\fP, \fBsha384\fP, \fBsha512\fP
+\fBsha256\fP (default), \fBsha384\fP, \fBsha512\fP, \fBsha1\fP
 .RE
 .PP
 .B \-o, \-\-out \fItype\fP[=\fIfilename\fP]
@@ -201,26 +183,26 @@ Supported values for \fItype\fP:
 RSA private key in PKCS#1 file format. If specified, the RSA key used for enrollment is stored in file \fIfilename\fP.
 If none of the \fItypes\fP listed below are specified, \fBscepclient\fP will stop after outputting this file.
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/private/myKey.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/private/myKey.der.
 .IP "\fBpkcs10\fP" 12
 PKCS#10 certificate request. If specified, the PKCS#10 request used or certificate enrollment is stored in file \fIfilename\fP.
 If none of the \fItypes\fP listed below are specified, \fBscepclient\fP will stop after outputting this file.
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/req/myReq.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/req/myReq.der.
 .IP "\fBpkcs7\fP" 12
 PKCS#7 SCEP request as it is sent using HTTP to the SCEP server. If specified, this SCEP request is stored in file \fIfilename\fP.
 If none of \fItypes\fP listed below is not specified, \fBscepclient\fP will stop after outputting this file.
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/req/pkcs7.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/req/pkcs7.der.
 .IP "\fBcert-self\fP" 12
 Self-signed certificate. If specified the self-signed certificate is stored in file \fIfilename\fP.
 .br
-The default \fIfilename\fP is $CONFDIR/ipsec.d/certs/selfCert.der.
+The default \fIfilename\fP is $CONFDIR/swanctl/x509/selfCert.der.
 .IP "\fBcert\fP" 12
 Enrolled certificate. This \fItype\fP must be specified for certificate enrollment.
 The enrolled certificate is stored in file \fIfilename\fP.
 .br
-The default \fIfilename\fP is set to $CONFDIR/ipsec.d/certs/myCert.der.
+The default \fIfilename\fP is set to $CONFDIR/swanctl/x509/myCert.der.
 .RE
 .PP
 .B \-m, \-\-method \fImethod\fP
@@ -252,9 +234,9 @@ The default max time is set to unlimited.
 Changes the log level (-1..4, default: 1)
 .RE
 .SH "EXAMPLES"
-.B  ipsec scepclient \-\-out caCert \-\-url http://scepserver/cgi\-bin/pkiclient.exe \-f
+.B  scepclient \-\-out caCert \-\-url http://scepserver/cgi\-bin/pkiclient.exe \-f
 .RS 4
-Acquire CA certificate from SCEP server and store it in the default file $CONFDIR/ipsec.d/cacerts/caCert.der.
+Acquire CA certificate from SCEP server and store it in the default file $CONFDIR/swanctl/x509ca/caCert.der.
 If more then one CA certificate is returned, store them in files named
 \'caCert\-1.der\', \'caCert\-2.der\', etc.
 If an RA certificate is returned, store it in a file named \'caCert\-ra.der\'.
@@ -262,32 +244,34 @@ If more than one RA certificate is returned, store them in files named
 \'caCert\-ra\-1.der\', \'caCert\-ra\-2.der\', etc.
 .RE
 .PP
-.B  ipsec scepclient \-\-out pkcs1=joeKey.der \-k 1024
+.B  scepclient \-\-out pkcs1=joeKey.der \-k 4096
 .RS 4
-Generate RSA private key with key length of 1024 bit and store it in file joeKey.der.
+Generate RSA private key with key length of 4096 bit and store it in file joeKey.der.
 .RE
 .PP
-.B  ipsec scepclient \-\-in pkcs1=joeKey.der \-\-out pkcs10=joeReq.der \e
-.br
-.B \-\-dn \*(rqC=AT, CN=John Doe\*(rq \-s email=john@doe.com \-p mypassword
+.B  scepclient \-\-in pkcs1=joeKey.der \-\-out pkcs10=joeReq.der \e
+.RS 11
+.B \-\-dn \*(rqC=AT, CN=John Doe\*(rq \-\-san john@doe.com \-p mypassword
+.RE
 .RS 4
-Generate a PKCS#10 request and store it in file joeReq.der. Use the RSA private key joeKey.der
-created earlier to sign the PKCS#10\-Request. In addition to the distinguished name include a
-email\-subjectAltName and a challenge password in the request.
+Generate a PKCS#10 request and store it in file \'joeReq.der\'. Use the RSA private key \'joeKey.der\'
+created earlier to sign the PKCS#10\-Request. In addition to the distinguished name include an
+email address as a \fIsubjectAltName\fP and a \fIchallenge password\fP in the request.
 .RE
 .PP
-.B  ipsec scepclient \-\-out pkcs1=joeKey.der \-\-out cert==joeCert.der \e
-.br
+.B  scepclient \-\-out pkcs1=joeKey.der \-\-out cert==joeCert.der \e
+.RS 11
 .B \-\-dn \*(rqC=CH, CN=John Doe\*(rq \-k 512 \-p 5xH2pnT7wq \e
 .br
-.B \-\-url http://scep.hsr.ch/cgi\-bin/pkiclient.exe \e
+.B \-\-url http://scep.strongswan.org/cgi\-bin/pkiclient.exe \e
 .br
 .B \-\-in cacert\-enc=caCert.der \-\-in cacert\-sig=caCert.der
+.RE
 .RS 4
-Generate a new RSA key for the request and store it in joeKey.der. Then enroll a certificate and store as joeCert.der.
-The challenge password is '5xH2pnT7wq'. The encryption and signature check has to be made with the same CA certificate
-caCert.der.
+Generate a new RSA key for the request and store it in \'joeKey.der\'. Then enroll a certificate and store as \'joeCert.der\'.
+The challenge password is \'5xH2pnT7wq\'. The encryption and signature check has to be made with the same CA certificate
+\'caCert.der\'.
 .RE
 
 .SH "BUGS"
-\fB\-\-optionsfrom\fP seems to have parsing problems reading option files containing strings in quotation marks.
+\fB\-\-options\fP seems to have parsing problems reading option files containing strings in quotation marks.
