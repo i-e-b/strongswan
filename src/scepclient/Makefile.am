@@ -1,4 +1,5 @@
-ipsec_PROGRAMS = scepclient
+sbin_PROGRAMS = scepclient
+
 scepclient_SOURCES = \
 scepclient.c scep.c scep.h
 
