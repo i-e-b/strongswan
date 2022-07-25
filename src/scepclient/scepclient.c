@@ -350,7 +350,7 @@ static void usage(const char *message)
 		"                                   - type cacert defines filename prefix of\n"
 		"                                     received CA certificate(s)\n"
 		"                                   - if no filename is given, default is used\n"
-		" --optionsfrom (-+) <filename>     reads additional options from given file\n"
+		" --options (-+) <filename>         reads additional options from given file\n"
 		" --force (-f)                      force existing file(s)\n"
 		" --httptimeout (-T)                timeout for HTTP operations (default: 30s)\n"
 		" --bind (-b)                       source address to bind for HTTP operations\n"
