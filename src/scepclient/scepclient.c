@@ -139,7 +139,7 @@ chunk_t issuerAndSubject;
 chunk_t getCertInitial;
 chunk_t scep_response;
 
-linked_list_t *subjectAltNames;
+linked_list_t *san;
 
 identification_t *subject      = NULL;
 private_key_t *private_key     = NULL;
@@ -279,7 +279,7 @@ static void exit_scepclient(err_t message, ...)
 	DESTROY_IF(x509_ca_enc);
 	DESTROY_IF(x509_ca_sig);
 	DESTROY_IF(pkcs10_req);
-	subjectAltNames->destroy_offset(subjectAltNames,
+	san->destroy_offset(san,
 								   offsetof(identification_t, destroy));
 	free(pkcs1.ptr);
 	free(pkcs7.ptr);
@@ -366,8 +366,8 @@ static void usage(const char *message)
 		"\n"
 		"Options for request generation (pkcs10):\n"
 		" --dn (-d) <dn>                    comma separated list of distinguished names\n"
-		" --subjectAltName (-s) <t>=<v>     include subjectAltName in certificate request\n"
-		"                                   <t> =  email | dns | ip \n"
+		" --san (-s) <san>                  include subjectAltName in certificate request\n"
+		"                                   multiple san options are allowed\n"
 		" --password (-p) <pw>              challenge password\n"
 		"                                   - use '%%prompt' as pw for a password prompt\n"
 		" --algorithm (-a) [<type>=]<algo>  algorithm to be used for PKCS#7 encryption,\n"
@@ -511,7 +511,7 @@ int main(int argc, char **argv)
 	challengePassword = chunk_empty;
 	getCertInitial    = chunk_empty;
 	scep_response     = chunk_empty;
-	subjectAltNames   = linked_list_create();
+	san   = linked_list_create();
 	options           = options_create();
 
 	for (;;)
@@ -533,7 +533,7 @@ int main(int argc, char **argv)
 			{ "days", required_argument, NULL, 'D' },
 			{ "startdate", required_argument, NULL, 'S' },
 			{ "enddate", required_argument, NULL, 'E' },
-			{ "subjectAltName", required_argument, NULL, 's' },
+			{ "san", required_argument, NULL, 's' },
 			{ "password", required_argument, NULL, 'p' },
 			{ "algorithm", required_argument, NULL, 'a' },
 			{ "url", required_argument, NULL, 'u' },
@@ -758,32 +758,9 @@ int main(int argc, char **argv)
 				distinguishedName = optarg;
 				continue;
 
-			case 's':       /* --subjectAltName */
-			{
-				char *value = strstr(optarg, "=");
-
-				if (value)
-				{
-					/* replace '=' by '\0' */
-					*value = '\0';
-					/* set pointer to start of value */
-					value++;
-				}
-
-				if (strcaseeq("email", optarg) ||
-					strcaseeq("dns", optarg) ||
-					strcaseeq("ip", optarg))
-				{
-					subjectAltNames->insert_last(subjectAltNames,
-								 identification_create_from_string(value));
-					continue;
-				}
-				else
-				{
-					usage("invalid --subjectAltName type");
-					continue;
-				}
-			}
+			case 's':       /* --san */
+				san->insert_last(san, identification_create_from_string(optarg));
+				continue;
 
 			case 'p':       /* --password */
 				if (challengePassword.len > 0)
@@ -1039,6 +1016,7 @@ int main(int argc, char **argv)
 				}
 				DBG1(DBG_APP, "%s cert \"%Y\" written to '%s'",
 					 ca_cert ? "CA" : "RA", cert->get_subject(cert), path);
+				}
 				chunk_free(&encoding);
 			}
 			enumerator->destroy(enumerator);
@@ -1130,7 +1108,7 @@ int main(int argc, char **argv)
 										CERT_PKCS10_REQUEST,
 										BUILD_SIGNING_KEY, private_key,
 										BUILD_SUBJECT, subject,
-										BUILD_SUBJECT_ALTNAMES, subjectAltNames,
+										BUILD_SUBJECT_ALTNAMES, san,
 										BUILD_CHALLENGE_PWD, challengePassword,
 										BUILD_DIGEST_ALG, pkcs10_signature_alg,
 										BUILD_END);
@@ -1219,7 +1197,7 @@ int main(int argc, char **argv)
 										 BUILD_NOT_BEFORE_TIME, notBefore,
 										 BUILD_NOT_AFTER_TIME, notAfter,
 										 BUILD_SERIAL, serialNumber,
-										 BUILD_SUBJECT_ALTNAMES, subjectAltNames,
+										 BUILD_SUBJECT_ALTNAMES, san,
 										 BUILD_END);
 		if (!x509_signer)
 		{
