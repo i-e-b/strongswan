@@ -1016,6 +1016,46 @@ int main(int argc, char **argv)
 				}
 				DBG1(DBG_APP, "%s cert \"%Y\" written to '%s'",
 					 ca_cert ? "CA" : "RA", cert->get_subject(cert), path);
+
+				/* check for untrusted self-signed root CA certificates */
+				if (ca_cert && (x509->get_flags(x509) & X509_SELF_SIGNED))
+				{
+					char digest_buf[HASH_SIZE_SHA256];
+					char base64_buf[HASH_SIZE_SHA256];
+					chunk_t cert_digest = {digest_buf, HASH_SIZE_SHA256};
+					chunk_t cert_id;
+					hasher_t *hasher;
+
+					/* SHA256 certificate digests */
+					hasher = lib->crypto->create_hasher(lib->crypto, HASH_SHA256);
+					if (!hasher)
+					{
+						exit_scepclient("could not create SHA256 hasher");
+					}
+					if (!hasher->get_hash(hasher, encoding, digest_buf))
+					{
+						hasher->destroy(hasher);
+						exit_scepclient("could not compute SHA256 hash");
+					}
+					hasher->destroy(hasher);
+					DBG1(DBG_APP, "   SHA256: %#B", &cert_digest);
+
+					/* SHA1 certificate digest */
+					hasher = lib->crypto->create_hasher(lib->crypto, HASH_SHA1);
+					if (!hasher)
+					{
+						exit_scepclient("could not create SHA1 hasher");
+					}
+					if (!hasher->get_hash(hasher, encoding, digest_buf))
+					{
+						hasher->destroy(hasher);
+						exit_scepclient("could not compute SHA1 hash");
+					}
+					hasher->destroy(hasher);
+					cert_digest.len = HASH_SIZE_SHA1;
+					cert_id = chunk_to_base64(cert_digest, base64_buf);
+					DBG1(DBG_APP, "   SHA1  : %#B (%.*s)",
+						 &cert_digest, cert_id.len-1, cert_id.ptr);
 				}
 				chunk_free(&encoding);
 			}
