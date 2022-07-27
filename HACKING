@@ -21,9 +21,14 @@ the code, you need the following tools:
     - yacc/bison
     - gperf
 
+AND
+    apt install libgmp3-dev
+
     Optionally:
     - lcov/genhtml
     - Doxygen
+
+things go into /usr/local/lib/ipsec/
 
 Check out the repository:
 
