@@ -395,7 +395,8 @@ static int usage(char *error)
 {
 	FILE *out = error ? stderr : stdout;
 
-	fprintf(out, "stroke [OPTIONS] command [ARGUMENTS]\n\n");
+	fprintf(out, "This is BLACK-SWAN!\n\n");
+    fprintf(out, "stroke [OPTIONS] command [ARGUMENTS]\n\n");
 	fprintf(out, "Options:\n");
 	fprintf(out, "  -h, --help             print this information.\n");
 	fprintf(out, "  -d, --daemon=NAME      name of the daemon.\n");

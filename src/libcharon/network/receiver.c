@@ -473,7 +473,7 @@ static job_requeue_t receive_packets(private_receiver_t *this)
 
 	/* read in a packet */
 	status = charon->socket->receive(charon->socket, &packet);
-    
+
     DBG0(DBG_NET, "IEB point - received packet");
 
 	if (status == NOT_SUPPORTED)
