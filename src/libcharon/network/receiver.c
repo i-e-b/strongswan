@@ -509,6 +509,7 @@ static job_requeue_t receive_packets(private_receiver_t *this)
 		packet->destroy(packet);
 		return JOB_REQUEUE_DIRECT;
 	}
+    DBG0(DBG_NET, "received packet from %#H to %#H on normal interface", src, dst);
 
 	/* if neither source nor destination port is 500 we assume an IKE packet
 	 * with Non-ESP marker or an ESP packet */
