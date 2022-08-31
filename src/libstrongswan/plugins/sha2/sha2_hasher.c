@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include "sha2_hasher.h"
+#include <debug.h>
 
 
 typedef struct private_sha512_hasher_t private_sha512_hasher_t;
