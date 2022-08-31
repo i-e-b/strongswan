@@ -96,10 +96,9 @@ METHOD(mac_t, get_mac, bool,
 		   this->h->get_hash(this->h, inner, out) &&
 		   this->h->get_hash(this->h, this->ipaded_key, NULL);
 
-    //snprintf ( char * s, size_t n, const char * format, ... );
     char* buf = "out=                                                                                                            ";
     for (int i = 0; i < 16; i++){
-        snprintf(&(buf[i+4]), 2, " %02x", (unsigned char)out[i]);
+        sprintf(&(buf[(i*2)+4]), "%02x", (unsigned char)out[i]);
     }
     DBG1(DBG_LIB, buf);
 
