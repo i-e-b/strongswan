@@ -93,6 +93,7 @@ METHOD(hasher_t, reset, bool,
 METHOD(hasher_t, get_hash, bool,
 	private_padlock_sha1_hasher_t *this, chunk_t chunk, uint8_t *hash)
 {
+DBG1(DBG_LIB, "padlock_sha1_hasher.c:96");
 	if (hash)
 	{
 		if (this->data.len)

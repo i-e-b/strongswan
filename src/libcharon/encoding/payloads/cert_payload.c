@@ -257,6 +257,7 @@ METHOD(cert_payload_t, get_container, container_t*,
 METHOD(cert_payload_t, get_hash, chunk_t,
 	private_cert_payload_t *this)
 {
+    DBG1(DBG_LIB, "cert_payload.c:257");
 	chunk_t hash = chunk_empty;
 
 	if ((this->encoding != ENC_X509_HASH_AND_URL &&

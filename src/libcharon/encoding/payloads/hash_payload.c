@@ -137,6 +137,7 @@ METHOD(hash_payload_t, set_hash, void,
 METHOD(hash_payload_t, get_hash, chunk_t,
 	private_hash_payload_t *this)
 {
+DBG1(DBG_LIB, "hash_payload.c:257");
 	return this->hash;
 }
 

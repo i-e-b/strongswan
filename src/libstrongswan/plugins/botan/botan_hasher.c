@@ -71,6 +71,7 @@ METHOD(hasher_t, reset, bool,
 METHOD(hasher_t, get_hash, bool,
 	private_botan_hasher_t *this, chunk_t chunk, uint8_t *hash)
 {
+DBG1(DBG_LIB, "botan_hasher.c:74");
 	if (botan_hash_update(this->hash, chunk.ptr, chunk.len))
 	{
 		return FALSE;

@@ -82,6 +82,8 @@ METHOD(signer_t, verify_signature, bool,
     int size = this->mac->get_mac_size(this->mac);
 	uint8_t mac[size];
 
+    DBG1(DBG_LIB, "verify_signature (src/libstrongswan/crypto/signers/mac_signer.c:79) Data => %B", &data);
+
 	if (signature.len != this->truncation)
 	{
 		return FALSE;
@@ -96,14 +98,16 @@ METHOD(signer_t, verify_signature, bool,
     }
 
     DBG1(DBG_LIB, "-------------EXPECTED-------------");
-    for (int i = 0; i < size; i ++) {
-        DBG1(DBG_LIB, " %i %02x", i, mac[i]);
-    }
+    char buf[100];char* curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
+    for (int i = 0; i < 16; i++){ sprintf(curs, " %02x", mac[i]); curs += 2; }
+    DBG1(DBG_LIB, buf);
 
     DBG1(DBG_LIB, "-------------ACTUAL-------------");
-    for (int i = 0; i < size; i ++) {
-        DBG1(DBG_LIB, " %i %02x", i, signature.ptr[i]);
-    }
+    curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
+    for (int i = 0; i < 16; i++){ sprintf(curs, " %02x", signature.ptr[i]); curs += 2; }
+    DBG1(DBG_LIB, buf);
+
+
 
     //DBG1(DBG_LIB, "MAC verification  expected %B", &mac);
     //DBG1(DBG_LIB, "MAC verification       got %B", signature);

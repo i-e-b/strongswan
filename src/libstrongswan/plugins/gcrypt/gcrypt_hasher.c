@@ -54,6 +54,7 @@ METHOD(hasher_t, reset, bool,
 METHOD(hasher_t, get_hash, bool,
 	private_gcrypt_hasher_t *this, chunk_t chunk, uint8_t *hash)
 {
+DBG1(DBG_LIB, "gcrypt_hasher.c:57");
 	gcry_md_write(this->hd, chunk.ptr, chunk.len);
 	if (hash)
 	{

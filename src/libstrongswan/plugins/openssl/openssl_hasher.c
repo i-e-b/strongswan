@@ -56,6 +56,7 @@ METHOD(hasher_t, reset, bool,
 METHOD(hasher_t, get_hash, bool,
 	private_openssl_hasher_t *this, chunk_t chunk, uint8_t *hash)
 {
+DBG1(DBG_LIB, "openssl_hasher.c:59");
 	if (EVP_DigestUpdate(this->ctx, chunk.ptr, chunk.len) != 1)
 	{
 		return FALSE;

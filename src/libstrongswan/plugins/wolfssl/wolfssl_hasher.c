@@ -64,6 +64,7 @@ METHOD(hasher_t, reset, bool,
 METHOD(hasher_t, get_hash, bool,
 	private_wolfssl_hasher_t *this, chunk_t chunk, uint8_t *hash)
 {
+DBG1(DBG_LIB, "wolfssl_hasher.c:67");
 	int ret;
 
 	ret = wc_HashUpdate(&this->hasher, this->type, chunk.ptr, chunk.len);

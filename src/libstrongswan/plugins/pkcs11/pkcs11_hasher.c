@@ -149,6 +149,7 @@ METHOD(hasher_t, reset, bool,
 METHOD(hasher_t, get_hash, bool,
 	private_pkcs11_hasher_t *this, chunk_t chunk, uint8_t *hash)
 {
+DBG1(DBG_LIB, "pkcs11_hasher.c:152");
 	CK_RV rv;
 	CK_ULONG len;
 

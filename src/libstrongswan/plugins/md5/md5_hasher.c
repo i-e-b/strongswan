@@ -314,6 +314,7 @@ METHOD(hasher_t, reset, bool,
 METHOD(hasher_t, get_hash, bool,
 	private_md5_hasher_t *this, chunk_t chunk, uint8_t *buffer)
 {
+DBG1(DBG_LIB, "md5_hasher.c:317");
 	MD5Update(this, chunk.ptr, chunk.len);
 	if (buffer != NULL)
 	{

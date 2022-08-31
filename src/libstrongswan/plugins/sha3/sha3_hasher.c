@@ -72,6 +72,7 @@ METHOD(hasher_t, get_hash_size, size_t,
 METHOD(hasher_t, get_hash, bool,
 	private_sha3_hasher_t *this, chunk_t chunk, uint8_t *buffer)
 {
+DBG1(DBG_LIB, "sha3_hasher.c:75");
 	this->keccak->absorb(this->keccak, chunk);
 
 	if (buffer != NULL)

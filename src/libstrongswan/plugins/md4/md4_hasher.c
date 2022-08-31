@@ -281,6 +281,7 @@ METHOD(hasher_t, reset, bool,
 METHOD(hasher_t, get_hash, bool,
 	private_md4_hasher_t *this, chunk_t chunk, uint8_t *buffer)
 {
+DBG1(DBG_LIB, "md4_hasher.c:284");
 	MD4Update(this, chunk.ptr, chunk.len);
 	if (buffer != NULL)
 	{
