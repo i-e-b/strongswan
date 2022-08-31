@@ -99,12 +99,12 @@ METHOD(signer_t, verify_signature, bool,
 
     DBG1(DBG_LIB, "-------------EXPECTED-------------");
     char buf[100];char* curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
-    for (int i = 0; i < 16; i++){ sprintf(curs, " %02x", mac[i]); curs += 2; }
+    for (int i = 0; i < 16; i++){ sprintf(curs, " %02x", mac[i]); curs += 3; }
     DBG1(DBG_LIB, buf);
 
     DBG1(DBG_LIB, "-------------ACTUAL-------------");
     curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
-    for (int i = 0; i < 16; i++){ sprintf(curs, " %02x", signature.ptr[i]); curs += 2; }
+    for (int i = 0; i < 16; i++){ sprintf(curs, " %02x", signature.ptr[i]); curs += 3; }
     DBG1(DBG_LIB, buf);
 
 

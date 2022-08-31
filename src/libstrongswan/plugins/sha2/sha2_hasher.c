@@ -476,6 +476,7 @@ METHOD(hasher_t, get_hash224, bool,
 METHOD(hasher_t, get_hash256, bool,
 	private_sha256_hasher_t *this, chunk_t chunk, uint8_t *buffer)
 {
+    DBG1(DBG_LIB, "src/libstrongswan/plugins/sha2/sha2_hasher.c:479");
 	sha256_write(this, chunk.ptr, chunk.len);
 	if (buffer != NULL)
 	{

@@ -98,7 +98,7 @@ METHOD(mac_t, get_mac, bool,
 		   this->h->get_hash(this->h, this->ipaded_key, NULL);
 
     char buf[100];char* curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
-    for (int i = 0; i < 16; i++){ sprintf(curs, " %02x", out[i]); curs += 2; }
+    for (int i = 0; i < 16; i++){ sprintf(curs, " %02x", out[i]); curs += 3; }
     DBG1(DBG_LIB, buf);
 
     return retOut;
