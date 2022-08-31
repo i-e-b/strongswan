@@ -97,11 +97,11 @@ METHOD(mac_t, get_mac, bool,
 		   this->h->get_hash(this->h, this->ipaded_key, NULL);
 
     //snprintf ( char * s, size_t n, const char * format, ... );
-    char* buf = "                                                                     ";
+    char* buf = "out=                                                                                                            ";
     for (int i = 0; i < 16; i++){
-        snprintf(buf+i, 2, "%02x", out[i]);
+        snprintf(&(buf[i+4]), 2, " %02x", (unsigned char)out[i]);
     }
-    DBG1(DBG_LIB, "Calculated %s", buf);
+    DBG1(DBG_LIB, buf);
 
     return retOut;
 }
