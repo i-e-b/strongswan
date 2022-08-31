@@ -439,7 +439,8 @@ METHOD(hasher_t, reset256, bool,
     DBG1(DBG_LIB, "SHA2 reset256    src/libstrongswan/plugins/sha2/sha2_hasher.c:439");
 
     char buf[256];char* curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
-    for (int i = 0; i < sizeof(this->sha_H); i++){ sprintf(curs, " %02x", sha256_hashInit[i]); curs += 3; }
+    unsigned char* initVec = (unsigned char*)sha256_hashInit;
+    for (int i = 0; i < 32; i++){ sprintf(curs, " %02x", initVec[i]); curs += 3; }
     DBG1(DBG_LIB, buf);
 
 	memcpy(&this->sha_H[0], &sha256_hashInit[0], sizeof(this->sha_H));
