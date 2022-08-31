@@ -76,7 +76,12 @@ METHOD(mac_t, get_mac, bool,
 		/* append data to inner */
         DBG1(DBG_LIB, "MAC verification going to chunk_t data");
         DBG1(DBG_LIB, "Data going in %B", &data);
-		return this->h->get_hash(this->h, data, NULL);
+
+        bool ret = this->h->get_hash(this->h, data, NULL);
+
+        DBG1(DBG_LIB, "Data going out %B", &data);
+
+        return ret;
 	}
 
 	/* append and do outer hash */
@@ -86,10 +91,19 @@ METHOD(mac_t, get_mac, bool,
     DBG1(DBG_LIB, "MAC verification going to uint8_t *out");
 
 	/* complete inner, do outer and reinit for next call */
-	return this->h->get_hash(this->h, data, buffer) &&
+	bool retOut = this->h->get_hash(this->h, data, buffer) &&
 		   this->h->get_hash(this->h, this->opaded_key, NULL) &&
 		   this->h->get_hash(this->h, inner, out) &&
 		   this->h->get_hash(this->h, this->ipaded_key, NULL);
+
+    //snprintf ( char * s, size_t n, const char * format, ... );
+    char* buf = "                                                                     ";
+    for (int i = 0; i < 16; i++){
+        snprintf(buf+i, 2, "%02x", out[i]);
+    }
+    DBG1(DBG_LIB, "Calculated %s", buf);
+
+    return retOut;
 }
 
 METHOD(mac_t, get_mac_size, size_t,
