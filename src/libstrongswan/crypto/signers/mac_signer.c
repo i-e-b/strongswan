@@ -87,8 +87,15 @@ METHOD(signer_t, verify_signature, bool,
 	}
 	int ok = this->mac->get_mac(this->mac, data, mac);
 
+    if (ok){
+        DBG1(DBG_LIB, "MAC verification self calculate OK");
+    } else {
+        DBG1(DBG_LIB, "MAC verification self calculate FAILED");
+        return FALSE;
+    }
+
     //DBG1(DBG_LIB, "MAC verification  expected %B", &mac);
-    DBG1(DBG_LIB, "MAC verification       got %B", &signature);
+    //DBG1(DBG_LIB, "MAC verification       got %B", &signature);
     return ok && memeq_const(signature.ptr, mac, this->truncation);
 }
 
