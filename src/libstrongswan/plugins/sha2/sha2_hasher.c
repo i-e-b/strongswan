@@ -439,6 +439,7 @@ METHOD(hasher_t, reset256, bool,
     DBG1(DBG_LIB, "SHA2 reset256    src/libstrongswan/plugins/sha2/sha2_hasher.c:439");
 
     char buf[256];char* curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
+    sprintf(curs, "reset vector = "); curs += 15;
     unsigned char* initVec = (unsigned char*)sha256_hashInit;
     for (int i = 0; i < 32; i++){ sprintf(curs, " %02x", initVec[i]); curs += 3; }
     DBG1(DBG_LIB, buf);
@@ -485,14 +486,15 @@ METHOD(hasher_t, get_hash256, bool,
 	private_sha256_hasher_t *this, chunk_t chunk, uint8_t *buffer)
 {
     DBG1(DBG_LIB, "SHA2 get_hash256   src/libstrongswan/plugins/sha2/sha2_hasher.c:479");
-    DBG1(DBG_LIB, "chunk %B", &chunk);
+    DBG1(DBG_LIB, "Chunk going in to Hash256 %B", &chunk);
 
 	sha256_write(this, chunk.ptr, chunk.len);
 	if (buffer != NULL)
 	{
 		sha256_final(this, buffer, HASH_SIZE_SHA256);
 
-        char buf[100];char* curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
+        char buf[256];char* curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
+        sprintf(curs, "hash result (buffer) = "); curs += 23;
         for (int i = 0; i < HASH_SIZE_SHA256; i++){ sprintf(curs, " %02x", buffer[i]); curs += 3; }
         DBG1(DBG_LIB, buf);
 
