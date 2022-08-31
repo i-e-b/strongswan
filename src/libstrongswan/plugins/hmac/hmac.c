@@ -91,13 +91,19 @@ METHOD(mac_t, get_mac, bool,
 
     DBG1(DBG_LIB, "MAC verification going to uint8_t *out");
 
+    char buf[256];char* curs = buf;for (int i = 0; i < 256; i++) buf[i]=0;
+    sprintf(curs, "HMAC 'inner' = "); curs+=15;
+    for (int i = 0; i < 32; i++){ sprintf(curs, " %02x", inner.ptr[i]); curs += 3; }
+    DBG1(DBG_LIB, buf);
+
 	/* complete inner, do outer and reinit for next call */
 	bool retOut = this->h->get_hash(this->h, data, buffer) &&
 		   this->h->get_hash(this->h, this->opaded_key, NULL) &&
 		   this->h->get_hash(this->h, inner, out) &&
 		   this->h->get_hash(this->h, this->ipaded_key, NULL);
 
-    char buf[100];char* curs = buf;for (int i = 0; i < 100; i++) buf[i]=0;
+    curs = buf;for (int i = 0; i < 256; i++) buf[i]=0;
+    sprintf(curs, "Final outcome of HMAC = "); curs+=24;
     for (int i = 0; i < 16; i++){ sprintf(curs, " %02x", out[i]); curs += 3; }
     DBG1(DBG_LIB, buf);
 
