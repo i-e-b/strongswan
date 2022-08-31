@@ -90,10 +90,8 @@ METHOD(signer_t, verify_signature, bool,
 
     if (ok){
         DBG1(DBG_LIB, "MAC verification self calculate OK");
-        printf("\nMAC verification self calculate OK\n");
     } else {
         DBG1(DBG_LIB, "MAC verification self calculate FAILED");
-        printf("\nMAC verification self calculate FAILED\n");
         return FALSE;
     }
 

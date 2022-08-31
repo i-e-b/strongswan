@@ -227,6 +227,7 @@ static bool set_aead_keys(private_keymat_v2_t *this, uint16_t enc_alg,
 
 	sk_i = chunk_cat("cc", sk_ai, sk_ei);
 	sk_r = chunk_cat("cc", sk_ar, sk_er);
+    DBG1(DBG_LIB, "\nsrc/libcharon/sa/ikev2/keymat_v2.c:230\n");
 
 	success = aead_i->set_key(aead_i, sk_i) &&
 			  aead_r->set_key(aead_r, sk_r);

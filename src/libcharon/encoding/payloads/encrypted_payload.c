@@ -652,7 +652,7 @@ static status_t decrypt_content(char *label, aead_t *aead, chunk_t encrypted,
 
 	if (!aead->decrypt(aead, crypt, assoc, iv, NULL)) // Maybe see src/libstrongswan/crypto/aead.c:88  ???
 	{
-		DBG1(DBG_ENC, "verifying %s integrity failed", label);
+		DBG1(DBG_ENC, "verifying %s integrity failed XXX", label);
 		return FAILED;
 	}
 

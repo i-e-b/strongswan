@@ -67,18 +67,22 @@ METHOD(mac_t, get_mac, bool,
 	 *
 	 */
 
+    DBG1(DBG_LIB, "\nsrc/libstrongswan/plugins/hmac/hmac.c:61\n");
 	uint8_t buffer[this->h->get_hash_size(this->h)];
 	chunk_t inner;
 
 	if (out == NULL)
 	{
 		/* append data to inner */
+        DBG1(DBG_LIB, "MAC verification going to chunk_t data");
 		return this->h->get_hash(this->h, data, NULL);
 	}
 
 	/* append and do outer hash */
 	inner.ptr = buffer;
 	inner.len = this->h->get_hash_size(this->h);
+
+    DBG1(DBG_LIB, "MAC verification going to uint8_t *out");
 
 	/* complete inner, do outer and reinit for next call */
 	return this->h->get_hash(this->h, data, buffer) &&
