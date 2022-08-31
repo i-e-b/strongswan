@@ -118,7 +118,7 @@ METHOD(aead_t, encrypt, bool,
 }
 
 METHOD(aead_t, decrypt, bool,
-	private_aead_t *this, chunk_t encrypted, chunk_t assoc, chunk_t iv,
+	private_aead_t *this, chunk_t encrypted, chunk_t assoc, chunk_t iv, // aead, crypt, assoc, iv, NULL
 	chunk_t *plain)
 {
 	aad_iv_encrypted_icv_type aad_iv_encrypted_icv;

@@ -110,7 +110,7 @@ METHOD(aead_t, decrypt, bool,
 	}
 	if (!this->signer->verify_signature(this->signer, encrypted, sig))
 	{
-		DBG1(DBG_LIB, "MAC verification failed");
+		DBG1(DBG_LIB, "MAC verification failed, sig was %B", sig);
 		return FALSE;
 	}
 	return this->crypter->decrypt(this->crypter, encrypted, iv, plain);

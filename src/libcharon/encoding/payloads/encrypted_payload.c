@@ -650,7 +650,7 @@ static status_t decrypt_content(char *label, aead_t *aead, chunk_t encrypted,
 	DBG3(DBG_ENC, "ICV %B", &icv);
 	DBG3(DBG_ENC, "assoc %B", &assoc);
 
-	if (!aead->decrypt(aead, crypt, assoc, iv, NULL))
+	if (!aead->decrypt(aead, crypt, assoc, iv, NULL)) // Maybe see src/libstrongswan/crypto/aead.c:88  ???
 	{
 		DBG1(DBG_ENC, "verifying %s integrity failed", label);
 		return FAILED;
@@ -673,7 +673,7 @@ static status_t decrypt_content(char *label, aead_t *aead, chunk_t encrypted,
 }
 
 METHOD(encrypted_payload_t, decrypt, status_t,
-	private_encrypted_payload_t *this, chunk_t assoc)
+	private_encrypted_payload_t *this, chunk_t assoc) // (aead, crypt, assoc, iv, NULL)
 {
 	chunk_t plain;
 	status_t status;

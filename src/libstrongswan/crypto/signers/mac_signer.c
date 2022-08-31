@@ -85,8 +85,11 @@ METHOD(signer_t, verify_signature, bool,
 	{
 		return FALSE;
 	}
-	return this->mac->get_mac(this->mac, data, mac) &&
-		   memeq_const(signature.ptr, mac, this->truncation);
+	auto ok = this->mac->get_mac(this->mac, data, mac);
+
+    DBG1(DBG_LIB, "MAC verification  expected %B", mac);
+    DBG1(DBG_LIB, "MAC verification       got %B", signature.ptr);
+    return ok && memeq_const(signature.ptr, mac, this->truncation);
 }
 
 METHOD(signer_t, get_key_size, size_t,
