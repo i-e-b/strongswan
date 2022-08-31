@@ -97,14 +97,18 @@ METHOD(signer_t, verify_signature, bool,
         return FALSE;
     }
 
+    DBG1(DBG_LIB, "-------------EXPECTED-------------");
     for (int i = 0; i < size; i ++) {
         DBG1(DBG_LIB, " %i %02x", i, mac[i]);
-        printf(" %02x", mac[i]);
     }
-    putchar('\n');
+
+    DBG1(DBG_LIB, "-------------ACTUAL-------------");
+    for (int i = 0; i < size; i ++) {
+        DBG1(DBG_LIB, " %i %02x", i, signature.ptr[i]);
+    }
 
     //DBG1(DBG_LIB, "MAC verification  expected %B", &mac);
-    //DBG1(DBG_LIB, "MAC verification       got %B", &signature);
+    //DBG1(DBG_LIB, "MAC verification       got %B", signature);
     return ok && memeq_const(signature.ptr, mac, this->truncation);
 }
 
