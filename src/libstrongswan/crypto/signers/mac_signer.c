@@ -82,7 +82,7 @@ METHOD(signer_t, verify_signature, bool,
     int size = this->mac->get_mac_size(this->mac);
 	uint8_t mac[size];
 
-    DBG1(DBG_LIB, "verify_signature (src/libstrongswan/crypto/signers/mac_signer.c:79) Data => %B", &data);
+    DBG1(DBG_LIB, "verify_signature (src/libstrongswan/crypto/signers/mac_signer.c:79)\nData input => %B", &data);
 
 	if (signature.len != this->truncation)
 	{
