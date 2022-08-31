@@ -88,9 +88,11 @@ METHOD(signer_t, verify_signature, bool,
 	int ok = this->mac->get_mac(this->mac, data, mac);
 
     if (ok){
-        DBG1(DBG_LIB, "MAC verification self calculate OK");
+        //DBG1(DBG_LIB, "MAC verification self calculate OK");
+        printf("MAC verification self calculate OK");
     } else {
-        DBG1(DBG_LIB, "MAC verification self calculate FAILED");
+        //DBG1(DBG_LIB, "MAC verification self calculate FAILED");
+        printf("MAC verification self calculate FAILED");
         return FALSE;
     }
 
