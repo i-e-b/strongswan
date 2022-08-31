@@ -96,9 +96,12 @@ METHOD(mac_t, get_mac, bool,
 		   this->h->get_hash(this->h, inner, out) &&
 		   this->h->get_hash(this->h, this->ipaded_key, NULL);
 
-    char* buf = "out=                                                                                                            ";
+    char buf[100];
+    char* curs = buf;
+    for (int i = 0; i < 100; i++) buf[i]=0;
     for (int i = 0; i < 16; i++){
-        sprintf(&(buf[(i*2)+4]), "%02x", (unsigned char)out[i]);
+        sprintf(curs, "%02x", out[i]);
+        curs += 2;
     }
     DBG1(DBG_LIB, buf);
 
