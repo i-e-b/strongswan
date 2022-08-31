@@ -108,9 +108,6 @@ METHOD(signer_t, verify_signature, bool,
     DBG1(DBG_LIB, buf);
 
 
-
-    //DBG1(DBG_LIB, "MAC verification  expected %B", &mac);
-    //DBG1(DBG_LIB, "MAC verification       got %B", signature);
     return ok && memeq_const(signature.ptr, mac, this->truncation);
 }
 
