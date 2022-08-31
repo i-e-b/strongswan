@@ -79,7 +79,8 @@ METHOD(signer_t, allocate_signature, bool,
 METHOD(signer_t, verify_signature, bool,
 	private_signer_t *this, chunk_t data, chunk_t signature)
 {
-	uint8_t mac[this->mac->get_mac_size(this->mac)];
+    int size = this->mac->get_mac_size(this->mac);
+	uint8_t mac[size];
 
 	if (signature.len != this->truncation)
 	{
@@ -89,15 +90,20 @@ METHOD(signer_t, verify_signature, bool,
 
     if (ok){
         DBG1(DBG_LIB, "MAC verification self calculate OK");
-        printf("MAC verification self calculate OK");
+        printf("\nMAC verification self calculate OK\n");
     } else {
         DBG1(DBG_LIB, "MAC verification self calculate FAILED");
-        printf("MAC verification self calculate FAILED");
+        printf("\nMAC verification self calculate FAILED\n");
         return FALSE;
     }
 
-    DBG1(DBG_LIB, "MAC verification  expected %B", &mac);
-    DBG1(DBG_LIB, "MAC verification       got %B", &signature);
+    for (int i = 0; i < size; i ++) {
+        printf(" %02x", mac[i]);
+    }
+    putchar('\n');
+
+    //DBG1(DBG_LIB, "MAC verification  expected %B", &mac);
+    //DBG1(DBG_LIB, "MAC verification       got %B", &signature);
     return ok && memeq_const(signature.ptr, mac, this->truncation);
 }
 
