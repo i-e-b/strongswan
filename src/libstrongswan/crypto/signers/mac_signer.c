@@ -98,6 +98,7 @@ METHOD(signer_t, verify_signature, bool,
     }
 
     for (int i = 0; i < size; i ++) {
+        DBG1(DBG_LIB, " %i %02x", i, mac[i]);
         printf(" %02x", mac[i]);
     }
     putchar('\n');
