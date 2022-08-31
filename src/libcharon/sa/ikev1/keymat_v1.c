@@ -700,6 +700,9 @@ METHOD(keymat_v1_t, get_hash, bool,
 	ike_sa_id_t *ike_sa_id, chunk_t sa_i, chunk_t id, chunk_t *hash,
 	signature_scheme_t *scheme)
 {
+
+    DBG1(DBG_LIB, "src/libcharon/sa/ikev1/keymat_v1.c:698");
+
 	chunk_t data;
 	uint64_t spi, spi_other;
 

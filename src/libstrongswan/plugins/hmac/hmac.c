@@ -75,6 +75,7 @@ METHOD(mac_t, get_mac, bool,
 	{
 		/* append data to inner */
         DBG1(DBG_LIB, "MAC verification going to chunk_t data");
+        DBG1(DBG_LIB, "Data going in %B", &data);
 		return this->h->get_hash(this->h, data, NULL);
 	}
 

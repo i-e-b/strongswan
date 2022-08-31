@@ -192,6 +192,7 @@ METHOD(hasher_t, reset, bool,
 METHOD(hasher_t, get_hash, bool,
 	private_sha1_hasher_t *this, chunk_t chunk, uint8_t *buffer)
 {
+    DBG1(DBG_LIB, "src/libstrongswan/plugins/sha1/sha1_hasher.c:192");
 	SHA1Update(this, chunk.ptr, chunk.len);
 	if (buffer != NULL)
 	{
